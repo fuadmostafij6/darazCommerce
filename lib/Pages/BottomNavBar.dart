@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'Account.dart';
 import 'Home.dart';
 import 'Profile.dart';
 
@@ -45,7 +46,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
             _page = newPage;
           });
         },
-        children: const [Home(), Home(), Home(), Profile()],
+        children: const [Home(), Home(), Home(), Account()],
       ),
     );
   }
