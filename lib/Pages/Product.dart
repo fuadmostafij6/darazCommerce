@@ -13,7 +13,12 @@ class _ProductState extends State<Product> {
   final PageController _pageController = PageController();
 
   void _changePage(int pageNo) {
-    _selectedPage = pageNo;
+    setState(() {
+      _selectedPage = pageNo;
+      _pageController.animateToPage(pageNo,
+          duration: Duration(milliseconds: 600),
+          curve: Curves.fastLinearToSlowEaseIn);
+    });
   }
 
   @override
@@ -68,10 +73,6 @@ class _ProductState extends State<Product> {
                 pageNumber: 1,
                 onPress: () {
                   _changePage(1);
-
-                  // setState(() {
-                  //   _changePage(0);
-                  // });
                 },
               );
             }),
@@ -80,16 +81,72 @@ class _ProductState extends State<Product> {
         const SizedBox(
           height: 20.0,
         ),
-        Container(
-          height: 500,
+        SizedBox(
+          height: MediaQuery.of(context).size.height * 0.6,
           child: PageView(
+            controller: _pageController,
+            onPageChanged: (int page) {
+              setState(() {
+                _selectedPage = page;
+              });
+            },
             children: <Widget>[
-              Center(
-                child: Text("faf"),
-              ),
-              Center(
-                child: Text("fa"),
-              ),
+              GridView.builder(
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    crossAxisSpacing: 5.0,
+                    mainAxisSpacing: 5.0,
+                  ),
+                  itemBuilder: (context, index) {
+                    return Container(
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(15.0),
+                          color: Colors.white),
+                      child: Column(
+                        children: [
+                          Container(
+                            height: 150.0,
+                            width: 150.0,
+                            decoration: const BoxDecoration(
+                                image: DecorationImage(
+                                    image: NetworkImage(
+                                      "https://images.unsplash.com/photo-1520342868574-5fa3804e551c?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=6ff92caffcdd63681a35134a6770ed3b&auto=format&fit=crop&w=1951&q=80",
+                                    ),
+                                    fit: BoxFit.contain)),
+                          ),
+                          const Text("category Name")
+                        ],
+                      ),
+                    );
+                  }),
+              GridView.builder(
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    crossAxisSpacing: 5.0,
+                    mainAxisSpacing: 5.0,
+                  ),
+                  itemBuilder: (context, index) {
+                    return Container(
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(15.0),
+                          color: Colors.white),
+                      child: Column(
+                        children: [
+                          Container(
+                            height: 150.0,
+                            width: 150.0,
+                            decoration: const BoxDecoration(
+                                image: DecorationImage(
+                                    image: NetworkImage(
+                                      "https://images.unsplash.com/photo-1520342868574-5fa3804e551c?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=6ff92caffcdd63681a35134a6770ed3b&auto=format&fit=crop&w=1951&q=80",
+                                    ),
+                                    fit: BoxFit.contain)),
+                          ),
+                          const Text("category Name")
+                        ],
+                      ),
+                    );
+                  }),
             ],
           ),
         ),
@@ -104,7 +161,7 @@ class TabButton extends StatelessWidget {
   final String text;
   final int pageNumber;
   final int selectedPage;
-  final Function onPress;
+  final VoidCallback onPress;
   const TabButton(
       {Key? key,
       required this.text,
@@ -116,7 +173,7 @@ class TabButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: onPress(),
+      onTap: onPress,
       child: Container(
         decoration: BoxDecoration(
           color: Colors.white,
